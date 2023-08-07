@@ -1,23 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+// import { Image } from './components/Image';
+// import { PdfFormate } from './components/PdfFormate';
+// import { Product } from "./components/Product"
+import { Routes, Route} from "react-router-dom";
+import { ProductFilter } from "./components/ProductFilter";
+import { ProductDetails } from "./components/ProductDetails";
+import { Body } from "./components/Body";
+import { useState } from "react";
+
+
 
 function App() {
+  const [cart , setCart] = useState({});
+  
+  console.log(cart)
+  
+  const ontoproduct = (count , productid) => {
+    const oldcount = cart[productid] || 0;
+    // console.log(oldcount)
+     setCart({...cart , [productid] : oldcount + count})
+    }
+    
+  const totalcount = Object.keys(cart).reduce((pre , current) => {
+          return pre + cart[current]   
+  } , 0)
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Body count = {totalcount}>
+        <Routes>
+          <Route path="/" element={<ProductFilter />} />
+          <Route path="/productdetails/:id/details" element={<ProductDetails oncount = {ontoproduct}/>} />
+         
+        </Routes>
+      </Body>
     </div>
   );
 }
